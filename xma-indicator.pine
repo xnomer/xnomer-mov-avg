@@ -1,0 +1,15 @@
+// This source code is subject to the terms of the Apache Public License 2.0 at https://www.apache.org/licenses/LICENSE-2.0
+// © xnomer
+
+//@version=5
+indicator("XMA", overlay=true)
+
+price = input.source(ohlc4, "Source")
+elasticity = input.float(0.1, "Elasticity", minval=0.0)
+length = input.int(50, "Length", minval=1)
+
+k = 2.0 / math.pi * math.atan(math.pi / 2.0 * elasticity / ta.stdev(price, length) * math.abs(ta.change(price)))
+xma = price
+xma := k * price + (1.0 - k) * nz(xma[1])
+
+plot(xma, display=display.all, color=color.orange)
